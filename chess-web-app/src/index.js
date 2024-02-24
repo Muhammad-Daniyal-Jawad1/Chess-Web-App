@@ -7,6 +7,9 @@ import reportWebVitals from './reportWebVitals';
 let somevariable =0;
 console.log(somevariable);
 
+let somevariable1 =1;
+console.log(somevariable1);
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
