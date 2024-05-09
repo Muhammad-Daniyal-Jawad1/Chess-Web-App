@@ -1,35 +1,95 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react'
+import { Route, Routes } from 'react-router-dom';
+
+import Register from "./Components/Register"
+import Login from "./Components/Login"
+import Home from "./Components/Home"
+import Error from "./Components/Error"
+import ResetPassword from './Components/ResetPassword';
+
+import tokens from "./tokens"
+import userInfo from "./userInfo"
+
+import axios from 'axios'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  if (!isLoggedin)
+  {
+    if (JSON.parse(localStorage.getItem('refresh-token')))
+    {
+      sendRefreshRequest();
+    }
+    else
+    {
+      return (
+        <>
+          <div className="App">
+            <Routes>
+              <Route path='/' element={<Login isLoggedIn={setIsLoggedin}/>} />
+              <Route path='/signup' element={<Register/>} />
+              <Route path='/resetpassword' element={<ResetPassword/>} />
+              <Route path='/home' element={<Home/>} />
+              <Route path="*" element={<Error />} />
+            </Routes>
+          </div>
+        </>
+      );
+    }
+    
+  }
+  else {
+    return (
+      <>
+        <div className="App">
+          <Routes>
+            <Route path='/' element={<Home/>} />
+          </Routes>
+        </div>
+      </>
+    )
+  }
+
+  
+  async function sendRefreshRequest() {
+
+    const response = await axios({
+      method: "get",
+        url: "http://localhost:4000/api/refresh",
+      headers: {
+      "Content-Type": "application/json",
+      "refresh-token": `${JSON.parse(localStorage.getItem('refresh-token'))}`
+      }
+  }).catch (function (error) {
+        if (error.response) {
+            console.log("Error");
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+    });
+
+    if(response)
+    {
+        if (response.status === 200) {
+            setIsLoggedin(true);
+            
+            tokens.accessToken = response.data.accessToken;
+            console.log(tokens.accessToken)
+
+            userInfo.name = response.data.name;
+            userInfo.email = response.data.email;
+            userInfo.skill = response.data.elo;
+
+            console.log(userInfo.name);
+            
+        }
+    }
+  }
+ 
 }
 
 export default App
