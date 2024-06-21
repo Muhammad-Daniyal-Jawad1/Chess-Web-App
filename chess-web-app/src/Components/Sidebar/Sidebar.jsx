@@ -1,8 +1,9 @@
 import "./Sidebar.scss";
 import logout from "../../logout"
+import { Link } from "react-router-dom"
 
 const Sidebar = (props) => {
-    const userFunctions = ["Queue for Match","View Previous Matches"];
+    const userFunctions = ["Game","GameHistory"];
   
 return (
     <div className="sidebar">
@@ -16,7 +17,7 @@ return (
             {userFunctions.map((func, index) => (
                 <li key={index}>
                     <span>
-                        {func}                     
+                      <Link to={`/${func}`}>{func}</Link>                   
                     </span>
                 </li>
             ))}

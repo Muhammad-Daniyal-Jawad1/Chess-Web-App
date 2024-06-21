@@ -6,6 +6,8 @@ import Login from "./Components/Login"
 import Home from "./Components/Home"
 import Error from "./Components/Error"
 import ResetPassword from './Components/ResetPassword';
+import Game from './Components/Game'
+import GameHistory from './Components/GameHistory'
 
 import tokens from "./tokens"
 import userInfo from "./userInfo"
@@ -31,6 +33,8 @@ function App() {
               <Route path='/signup' element={<Register/>} />
               <Route path='/resetpassword' element={<ResetPassword/>} />
               <Route path='/home' element={<Home/>} />
+              <Route path='/game' element={<Game/>} />
+              <Route path='/history' element={<GameHistory/>} />
               <Route path="*" element={<Error />} />
             </Routes>
           </div>
@@ -45,6 +49,8 @@ function App() {
         <div className="App">
           <Routes>
             <Route path='/' element={<Home/>} />
+            <Route path='/game' element={<Game/>} />
+            <Route path='/gamehistory' element={<GameHistory/>} />
           </Routes>
         </div>
       </>
@@ -78,13 +84,13 @@ function App() {
             setIsLoggedin(true);
             
             tokens.accessToken = response.data.accessToken;
-            console.log(tokens.accessToken)
+            //console.log(tokens.accessToken)
 
             userInfo.name = response.data.name;
             userInfo.email = response.data.email;
             userInfo.skill = response.data.elo;
 
-            console.log(userInfo.name);
+            //console.log(userInfo.name);
             
         }
     }

@@ -3,7 +3,7 @@ import Navbar from "./Navbar/Navbar"
 import Sidebar from "./Sidebar/Sidebar"
 import "./user.scss"
 
-function Home(props) {
+function GameHistory(props) {
   return (
     <div >
       <div className="home">
@@ -11,10 +11,10 @@ function Home(props) {
         <div className="homeContainer">
           <Navbar />
         </div>
-
+        
       </div>
     </div>
   );
 }
 
-export default Home;
+export default GameHistory;
